@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log In to Snapchat</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f7f7f7;
+      color: #3c3c3c;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── MAIN CONTENT ─────────────────────────────────────── */
+    .main-content {
+      flex: 1;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 24px 16px 32px;
+      background-color: #f7f7f7;
+    }
+
+    .login-card {
+      background: #ffffff;
+      width: 357px;
+      /* top padding ≈ 23px (y=52→75 ghost start), sides 30px, bottom 24px */
+      padding: 23px 32px 26px;
+      box-shadow: 1px 0 6px rgba(0,0,0,0.06), -1px 0 6px rgba(0,0,0,0.06);
+    }
+
+    /* ── GHOST LOGO (black Snapchat ghost) ───────────────── */
+    .ghost-wrap {
+      display: flex;
+      justify-content: center;
+      /* ghost is 58px tall; heading is ~26px below ghost */
+      margin-bottom: 20px;
+    }
+    .ghost-wrap svg {
+      width: 60px;
+      height: 60px;
+      display: block;
+    }
+
+    /* ── HEADING ─────────────────────────────────────────── */
+    .login-heading {
+      font-size: 26px;
+      font-weight: 700;
+      color: #111111;
+      text-align: center;
+      margin-bottom: 26px;
+      letter-spacing: -0.2px;
+      line-height: 1.2;
+    }
+
+    /* ── INPUT FIELD ─────────────────────────────────────── */
+    .input-group {
+      margin-bottom: 0;
+    }
+    .input-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: #656c76;
+      margin-bottom: 6px;
+    }
+    .input-group input {
+      width: 100%;
+      height: 44px;
+      border: 1px solid #e3e3e3;
+      border-radius: 0;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #111;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.18s;
+    }
+    .input-group input:focus {
+      border-color: #0FADF5;
+    }
+    .input-group input::placeholder {
+      color: #b5bcc5;
+    }
+
+    /* ── PHONE LINK ──────────────────────────────────────── */
+    .phone-link-wrap {
+      text-align: center;
+      /* gap from input bottom (y=276) to link top (y=295) ≈ 19px */
+      margin-top: 19px;
+    }
+    .phone-link {
+      color: #0FADF5;
+      font-size: 12.5px;
+      text-decoration: none;
+      font-weight: 400;
+    }
+    .phone-link:hover { text-decoration: underline; }
+
+    /* ── BLUE GHOST ICON ─────────────────────────────────── */
+    /*
+       Pixel data: blue icon y=327-366 (height 39px), x=920-999 (width 79px)
+       centered at x≈960.  Width on 357px card: ~79px at 1:1 DPR.
+       We render a blue Snapchat ghost icon in Snapchat blue (#0FADF5).
+    */
+    .blue-ghost-wrap {
+      display: flex;
+      justify-content: center;
+      /* gap from phone link bottom (y=307) to icon top (y=327) ≈ 20px */
+      margin-top: 20px;
+      /* gap from icon bottom (y=366) to OR divider (y=398) ≈ 32px */
+      margin-bottom: 32px;
+    }
+    .blue-ghost-wrap svg {
+      width: 68px;
+      height: 36px;
+      display: block;
+    }
+
+    /* ── OR DIVIDER ──────────────────────────────────────── */
+    .or-divider {
+      display: flex;
+      align-items: center;
+      /* gap from OR to Google button (y=425) ≈ 27px */
+      margin-bottom: 27px;
+      gap: 12px;
+    }
+    .or-divider .line {
+      flex: 1;
+      height: 1px;
+      background: #dadadc;
+    }
+    .or-divider span {
+      font-size: 11px;
+      color: #828688;
+      font-weight: 600;
+      letter-spacing: 0.8px;
+    }
+
+    /* ── GOOGLE BUTTON ───────────────────────────────────── */
+    /*
+       Pixel data: y=425-464, height=39px; border color (#dadce0)
+       width ≈ 273px (x=824-1097); centered within 357px card.
+    */
+    .google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 39px;
+      border: 1px solid #dadce0;
+      border-radius: 2px;
+      background: #ffffff;
+      cursor: pointer;
+      gap: 10px;
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: #3c4043;
+      letter-spacing: 0.2px;
+      transition: background 0.15s;
+    }
+    .google-btn:hover {
+      background: #f8f9fa;
+    }
+    .google-btn .google-icon {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* ── SIGN-UP ROW (below card) ─────────────────────────── */
+    /*
+       Pixel data: "New to Snapchat?" at y=519-535, outside the card
+       gap from card bottom (y=488) to text (y=519) ≈ 31px
+    */
+    .signup-row {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 13px;
+      color: #4a5568;
+    }
+    .signup-row a {
+      color: #0FADF5;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .signup-row a:hover { text-decoration: underline; }
+
+    /* ── FOOTER SECTION ───────────────────────────────────── */
+    /*
+       Pixel data: y=620-874, background #f8f9fb
+       Left sidebar at x≈426; 3-column footer at x=693-1378
+    */
+    .footer-section {
+      background: #f8f9fb;
+      display: flex;
+      align-items: flex-start;
+      padding: 32px 0 34px;
+    }
+
+    /* Left sidebar nav */
+    .left-nav {
+      flex-shrink: 0;
+      width: 260px;
+      padding-left: 120px;
+    }
+    .left-nav .nav-group-heading {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1a1a1a;
+      text-transform: none;
+      letter-spacing: 0;
+      margin-bottom: 8px;
+    }
+    .left-nav a {
+      display: block;
+      font-size: 12px;
+      color: #525252;
+      text-decoration: none;
+      margin-bottom: 6px;
+      line-height: 1.6;
+    }
+    .left-nav a:hover { color: #0FADF5; }
+    .left-nav .lang-section {
+      margin-top: 22px;
+    }
+    .left-nav .lang-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+    .left-nav select {
+      font-size: 12px;
+      color: #525252;
+      border: 1px solid #c8c8c8;
+      border-radius: 3px;
+      padding: 4px 8px;
+      background: #ffffff;
+      cursor: pointer;
+    }
+
+    /* Footer link columns */
+    .footer-links {
+      display: flex;
+      flex: 1;
+      gap: 56px;
+      padding-right: 80px;
+    }
+    .footer-col .col-heading {
+      font-size: 11px;
+      font-weight: 700;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 12px;
+      color: #525252;
+      text-decoration: none;
+      margin-bottom: 6px;
+      line-height: 1.6;
+      white-space: nowrap;
+    }
+    .footer-col a:hover { color: #0FADF5; }
+
+    /* ── BOTTOM DARK BAR ──────────────────────────────────── */
+    /*
+       Pixel data: y=874-928, background #262626
+       Text "Privacy Policy" at x≈426, "Terms of Service" at x≈551 — both light-colored
+    */
+    .bottom-bar {
+      background: #262626;
+      padding: 12px 120px;
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .bottom-bar a {
+      font-size: 12px;
+      color: #b8b8b8;
+      text-decoration: none;
+    }
+    .bottom-bar a:hover { color: #ffffff; }
+  </style>
+</head>
+<body>
+
+  <!-- ── MAIN LOGIN SECTION ──────────────────────────────── -->
+  <div class="main-content">
+    <div>
+      <div class="login-card">
+
+        <!--
+          Snapchat ghost logo — black.
+          Pixel analysis: 60×60 px at display center, y=75-133.
+          The ghost outline path below is modelled on the official Snapchat
+          ghost shape: rounded head, side bumps, three-wave bottom, two eyes.
+        -->
+        <div class="ghost-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130" aria-label="Snapchat logo">
+            <!-- Ghost body -->
+            <path fill="#000000" d="
+              M65 8
+              C 41 8 22 27 22 51
+              L 22 76
+              L 14 84
+              C 11 87 9 91 9 96
+              C 9 105 16 112 27 112
+              L 33 112
+              C 35 121 43 127 53 129
+              C 55 134 59 138 65 138
+              C 71 138 75 134 77 129
+              C 87 127 95 121 97 112
+              L 103 112
+              C 114 112 121 105 121 96
+              C 121 91 119 87 116 84
+              L 108 76
+              L 108 51
+              C 108 27 89 8 65 8
+              Z
+            "/>
+            <!-- Left eye (white) -->
+            <circle fill="#ffffff" cx="50" cy="55" r="9"/>
+            <!-- Right eye (white) -->
+            <circle fill="#ffffff" cx="80" cy="55" r="9"/>
+            <!-- Nose dot (black) -->
+            <circle fill="#000000" cx="65" cy="72" r="3.5"/>
+          </svg>
+        </div>
+
+        <!-- Page heading -->
+        <h1 class="login-heading">Log in to Snapchat</h1>
+
+        <!-- Username / Email input -->
+        <div class="input-group">
+          <label for="username">Username or Email</label>
+          <input
+            id="username"
+            type="text"
+            placeholder="Username or Email"
+            autocomplete="username"
+            spellcheck="false"
+          />
+        </div>
+
+        <!-- "Use phone number instead" link -->
+        <div class="phone-link-wrap">
+          <a href="#" class="phone-link">Use phone number instead</a>
+        </div>
+
+        <!--
+          Blue Snapchat ghost icon.
+          Pixel analysis: solid Snapchat-blue (#0FADF5) shape, y=327-366,
+          x=920-999 (≈79 px wide, 39 px tall) centered at x≈960.
+          Rendered here as the ghost outline filled in Snapchat blue.
+        -->
+        <div class="blue-ghost-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 68" aria-hidden="true">
+            <!-- Blue ghost body (lower half / compact version) -->
+            <path fill="#0FADF5" d="
+              M65 4
+              C 43 4 26 20 26 40
+              L 26 55
+              L 18 63
+              C 16 65 14 67 14 68
+              L 20 68
+              C 22 68 23 66 24 64
+              C 28 62 33 60 38 62
+              C 41 64 47 68 54 68
+              C 58 68 61 66 63 64
+              C 63 64 64 68 65 68
+              C 66 68 67 64 67 64
+              C 69 66 72 68 76 68
+              C 83 68 89 64 92 62
+              C 97 60 102 62 106 64
+              C 107 66 108 68 110 68
+              L 116 68
+              C 116 67 114 65 112 63
+              L 104 55
+              L 104 40
+              C 104 20 87 4 65 4
+              Z
+            "/>
+            <!-- Left eye (white) -->
+            <circle fill="#ffffff" cx="50" cy="35" r="7"/>
+            <!-- Right eye (white) -->
+            <circle fill="#ffffff" cx="80" cy="35" r="7"/>
+          </svg>
+        </div>
+
+        <!-- OR divider -->
+        <div class="or-divider">
+          <span class="line"></span>
+          <span>OR</span>
+          <span class="line"></span>
+        </div>
+
+        <!-- Continue with Google button -->
+        <button class="google-btn" type="button">
+          <!--
+            Google "G" logo — multicolour SVG.
+            Pixel analysis shows red at x≈876, blue at x≈883, green at x≈876,
+            yellow at x≈879 near y=440-448, consistent with the Google G icon.
+          -->
+          <svg class="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+          </svg>
+          Continue with Google
+        </button>
+
+      </div><!-- /.login-card -->
+
+      <!--
+        "New to Snapchat? Sign Up" — sits on the gray background BELOW the card.
+        Pixel analysis: y=519-535, which is ≈31px below the card's bottom (y=488).
+      -->
+      <div class="signup-row">
+        New&nbsp;to Snapchat?&nbsp;<a href="#">Sign Up</a>
+      </div>
+
+    </div>
+  </div><!-- /.main-content -->
+
+  <!-- ── FOOTER SECTION ─────────────────────────────────── -->
+  <!--
+    Pixel analysis: background #f8f9fb, spans y≈620-874.
+    Left nav at x≈426; three link columns centered at x≈693–1378.
+  -->
+  <div class="footer-section">
+
+    <!-- Left sidebar navigation -->
+    <nav class="left-nav" aria-label="Site navigation">
+      <p class="nav-group-heading">Company</p>
+      <a href="#">Snap Inc.</a>
+      <a href="#">Careers</a>
+      <a href="#">News</a>
+
+      <div class="lang-section">
+        <p class="lang-label">Language</p>
+        <select aria-label="Select language">
+          <option>English (US)</option>
+        </select>
+      </div>
+    </nav>
+
+    <!-- Three-column footer links -->
+    <div class="footer-links">
+
+      <div class="footer-col">
+        <p class="col-heading">Community</p>
+        <a href="#">Support</a>
+        <a href="#">Community Guidelines</a>
+        <a href="#">Safety Center</a>
+      </div>
+
+      <div class="footer-col">
+        <p class="col-heading">Advertising</p>
+        <a href="#">Buy Ads</a>
+        <a href="#">Advertising Policies</a>
+        <a href="#">Political Ads Library</a>
+        <a href="#">Brand Guidelines</a>
+        <a href="#">Promotions Rules</a>
+        <a href="#">Custom Creative Tools Terms</a>
+      </div>
+
+      <div class="footer-col">
+        <p class="col-heading">Legal</p>
+        <a href="#">Privacy Center</a>
+        <a href="#">Your Privacy Choices</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Report Infringement</a>
+        <a href="#">Community Geofilter Terms</a>
+        <a href="#">Lens Studio Terms</a>
+      </div>
+
+    </div>
+  </div><!-- /.footer-section -->
+
+  <!-- ── DARK BOTTOM BAR ─────────────────────────────────── -->
+  <!--
+    Pixel analysis: background #262626 (38,38,38), y=874-928.
+    Text "Privacy Policy" at x≈426, "Terms of Service" at x≈551 — light gray text.
+  -->
+  <div class="bottom-bar">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms of Service</a>
+  </div>
+
+</body>
+</html>
