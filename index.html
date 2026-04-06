@@ -9,11 +9,36 @@
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: #f7f7f7;
+      background-color: #fffc00;
       color: #3c3c3c;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        linear-gradient(rgba(255, 252, 0, 0.55), rgba(255, 252, 0, 0.55)),
+        url("./snapchat-background.png") center/cover no-repeat;
+      opacity: 0.95;
+      z-index: -2;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(255,255,255,0.55), transparent 35%),
+        radial-gradient(circle at 85% 25%, rgba(255,255,255,0.5), transparent 34%),
+        radial-gradient(circle at 25% 85%, rgba(255,255,255,0.45), transparent 36%);
+      z-index: -1;
+      pointer-events: none;
     }
 
     /* ── MAIN CONTENT ─────────────────────────────────────── */
@@ -23,15 +48,16 @@
       align-items: flex-start;
       justify-content: center;
       padding: 24px 16px 32px;
-      background-color: #f7f7f7;
+      background-color: transparent;
     }
 
     .login-card {
-      background: #ffffff;
+      background: rgba(255, 255, 255, 0.96);
       width: 357px;
       /* top padding ≈ 23px (y=52→75 ghost start), sides 30px, bottom 24px */
       padding: 23px 32px 26px;
       box-shadow: 1px 0 6px rgba(0,0,0,0.06), -1px 0 6px rgba(0,0,0,0.06);
+      border-radius: 10px;
     }
 
     /* ── GHOST LOGO (black Snapchat ghost) ───────────────── */
@@ -41,9 +67,9 @@
       /* ghost is 58px tall; heading is ~26px below ghost */
       margin-bottom: 20px;
     }
-    .ghost-wrap svg {
-      width: 60px;
-      height: 60px;
+    .ghost-wrap img {
+      width: 72px;
+      height: auto;
       display: block;
     }
 
@@ -61,6 +87,9 @@
     /* ── INPUT FIELD ─────────────────────────────────────── */
     .input-group {
       margin-bottom: 0;
+    }
+    .input-group + .input-group {
+      margin-top: 14px;
     }
     .input-group label {
       display: block;
@@ -91,8 +120,8 @@
     /* ── PHONE LINK ──────────────────────────────────────── */
     .phone-link-wrap {
       text-align: center;
-      /* gap from input bottom (y=276) to link top (y=295) ≈ 19px */
-      margin-top: 19px;
+      /* tightened spacing after adding password field to match the new form stack */
+      margin-top: 14px;
     }
     .phone-link {
       color: #0FADF5;
@@ -306,35 +335,7 @@
           ghost shape: rounded head, side bumps, three-wave bottom, two eyes.
         -->
         <div class="ghost-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 130" aria-label="Snapchat logo">
-            <!-- Ghost body -->
-            <path fill="#000000" d="
-              M65 8
-              C 41 8 22 27 22 51
-              L 22 76
-              L 14 84
-              C 11 87 9 91 9 96
-              C 9 105 16 112 27 112
-              L 33 112
-              C 35 121 43 127 53 129
-              C 55 134 59 138 65 138
-              C 71 138 75 134 77 129
-              C 87 127 95 121 97 112
-              L 103 112
-              C 114 112 121 105 121 96
-              C 121 91 119 87 116 84
-              L 108 76
-              L 108 51
-              C 108 27 89 8 65 8
-              Z
-            "/>
-            <!-- Left eye (white) -->
-            <circle fill="#ffffff" cx="50" cy="55" r="9"/>
-            <!-- Right eye (white) -->
-            <circle fill="#ffffff" cx="80" cy="55" r="9"/>
-            <!-- Nose dot (black) -->
-            <circle fill="#000000" cx="65" cy="72" r="3.5"/>
-          </svg>
+          <img src="./snapchat-logo.png" alt="Snapchat logo" />
         </div>
 
         <!-- Page heading -->
@@ -349,6 +350,16 @@
             placeholder="Username or Email"
             autocomplete="username"
             spellcheck="false"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
           />
         </div>
 
