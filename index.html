@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Log In to Snapchat</title>
   <style>
+    :root {
+      --snapchat-logo-data: url("data:image/png;base64,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");
+    }
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -50,10 +53,13 @@
       padding: 24px 16px 32px;
       background-color: transparent;
     }
+    .main-content > div {
+      width: min(100%, 357px);
+    }
 
     .login-card {
       background: rgba(255, 255, 255, 0.96);
-      width: 357px;
+       width: 100%;
       /* top padding ≈ 23px (y=52→75 ghost start), sides 30px, bottom 24px */
       padding: 23px 32px 26px;
       box-shadow: 1px 0 6px rgba(0,0,0,0.06), -1px 0 6px rgba(0,0,0,0.06);
@@ -67,9 +73,10 @@
       /* ghost is 58px tall; heading is ~26px below ghost */
       margin-bottom: 20px;
     }
-    .ghost-wrap img {
+    .ghost-logo {
       width: 72px;
-      height: auto;
+      height: 74px;
+      background: var(--snapchat-logo-data) center/contain no-repeat;
       display: block;
     }
 
@@ -121,7 +128,7 @@
     .phone-link-wrap {
       text-align: center;
       /* tightened spacing after adding password field to match the new form stack */
-      margin-top: 14px;
+      margin-top: 12px;
     }
     .phone-link {
       color: #0FADF5;
@@ -145,10 +152,29 @@
       /* gap from icon bottom (y=366) to OR divider (y=398) ≈ 32px */
       margin-bottom: 32px;
     }
-    .blue-ghost-wrap svg {
+    .blue-ghost-logo {
       width: 68px;
-      height: 36px;
+      height: 70px;
+      background: var(--snapchat-logo-data) center/contain no-repeat;
       display: block;
+    }
+
+    .login-btn {
+      width: 100%;
+      height: 44px;
+      border: 0;
+      border-radius: 999px;
+      background: #0FADF5;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      margin-top: 14px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .login-btn:hover {
+      background: #0b98d7;
     }
 
     /* ── OR DIVIDER ──────────────────────────────────────── */
@@ -319,6 +345,45 @@
       text-decoration: none;
     }
     .bottom-bar a:hover { color: #ffffff; }
+
+    @media (max-width: 768px) {
+      .main-content {
+        padding: 16px 12px 24px;
+      }
+      .login-card {
+        padding: 20px 18px 24px;
+      }
+      .footer-section {
+        flex-direction: column;
+        gap: 24px;
+        padding: 24px 16px;
+      }
+      .left-nav {
+        width: 100%;
+        padding-left: 0;
+      }
+      .footer-links {
+        width: 100%;
+        padding-right: 0;
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+      .bottom-bar {
+        padding: 12px 16px;
+        gap: 16px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .login-card {
+        padding: 18px 14px 20px;
+        border-radius: 8px;
+      }
+      .login-heading {
+        font-size: 24px;
+        margin-bottom: 20px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -335,7 +400,7 @@
           ghost shape: rounded head, side bumps, three-wave bottom, two eyes.
         -->
         <div class="ghost-wrap">
-          <img src="./snapchat-logo.png" alt="Snapchat logo" />
+          <div class="ghost-logo" role="img" aria-label="Snapchat logo"></div>
         </div>
 
         <!-- Page heading -->
@@ -363,6 +428,8 @@
           />
         </div>
 
+        <button class="login-btn" type="button">Log In</button>
+
         <!-- "Use phone number instead" link -->
         <div class="phone-link-wrap">
           <a href="#" class="phone-link">Use phone number instead</a>
@@ -375,37 +442,7 @@
           Rendered here as the ghost outline filled in Snapchat blue.
         -->
         <div class="blue-ghost-wrap">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 68" aria-hidden="true">
-            <!-- Blue ghost body (lower half / compact version) -->
-            <path fill="#0FADF5" d="
-              M65 4
-              C 43 4 26 20 26 40
-              L 26 55
-              L 18 63
-              C 16 65 14 67 14 68
-              L 20 68
-              C 22 68 23 66 24 64
-              C 28 62 33 60 38 62
-              C 41 64 47 68 54 68
-              C 58 68 61 66 63 64
-              C 63 64 64 68 65 68
-              C 66 68 67 64 67 64
-              C 69 66 72 68 76 68
-              C 83 68 89 64 92 62
-              C 97 60 102 62 106 64
-              C 107 66 108 68 110 68
-              L 116 68
-              C 116 67 114 65 112 63
-              L 104 55
-              L 104 40
-              C 104 20 87 4 65 4
-              Z
-            "/>
-            <!-- Left eye (white) -->
-            <circle fill="#ffffff" cx="50" cy="35" r="7"/>
-            <!-- Right eye (white) -->
-            <circle fill="#ffffff" cx="80" cy="35" r="7"/>
-          </svg>
+          <div class="blue-ghost-logo" role="img" aria-label="Snapchat logo"></div>
         </div>
 
         <!-- OR divider -->
